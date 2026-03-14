@@ -7,6 +7,7 @@ public class CreateUserResponse {
     private String name;
     private String surname;
     private String dni;
+    private int age;
     private Long period;
     private LocalDate payDay;
     private LocalDate expirationDate;
@@ -33,6 +34,14 @@ public class CreateUserResponse {
 
     public void setDni(String dni) {
         this.dni = dni;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public Long getPeriod() {

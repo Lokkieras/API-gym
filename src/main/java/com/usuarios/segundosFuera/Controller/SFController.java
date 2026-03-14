@@ -20,11 +20,11 @@ public class SFController {
     // Guardar un nuevo usuario
     @PostMapping
     public ResponseEntity<CreateUserResponse> save(@RequestBody CreateUserRequest user) {
-        return ResponseEntity.created(URI.create("")).body(userService.saveUser(user));
+        return ResponseEntity.created(URI.create("")).body(userService.SaveUser(user));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable Long id) {
-        return userService.delete(id);
+        return userService.DeleteUser(id);
     }
 }

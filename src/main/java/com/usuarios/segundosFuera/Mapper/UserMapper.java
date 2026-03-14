@@ -12,7 +12,7 @@ public class UserMapper {
 
     public static UsersEntity CreateUserRequestToUserEntity(CreateUserRequest user, LocalDate actualDay, LocalDate expirationDate, PeriodPayEntity periodDay)
     {
-        UsersEntity users = new UsersEntity(user.getName(),user.getSurname(),user.getDni(),periodDay,actualDay,expirationDate,true);
+        UsersEntity users = new UsersEntity(user.getName(),user.getSurname(), user.getAge(), user.getDni(),periodDay,actualDay,expirationDate,true);
         return users;
     }
 
@@ -22,6 +22,7 @@ public class UserMapper {
         CreateUserResponse userResponse = new CreateUserResponse();
         userResponse.setName(user.getName());
         userResponse.setSurname(user.getSurname());
+        userResponse.setAge(user.getAge());
         userResponse.setDni(user.getDni());
         userResponse.setPeriod(user.getPeriodPaidID().getId());
         userResponse.setPayDay(user.getPayDay());

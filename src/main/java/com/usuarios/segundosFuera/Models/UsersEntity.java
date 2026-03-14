@@ -15,6 +15,7 @@ public class UsersEntity {
 
     private String name;
     private String surname;
+    private int age;
 
     @Column(nullable = false)
     private String dni;
@@ -32,9 +33,10 @@ public class UsersEntity {
     public UsersEntity() {
     }
 
-    public UsersEntity(String name, String surname, String dni, PeriodPayEntity periodPaidID, LocalDate payDay, LocalDate expirationDay, boolean paid) {
+    public UsersEntity(String name, String surname, int age, String dni, PeriodPayEntity periodPaidID, LocalDate payDay, LocalDate expirationDay, boolean paid) {
         this.name = name;
         this.surname = surname;
+        this.age = age;
         this.dni = dni;
         this.periodPaidID = periodPaidID;
         this.payDay = payDay;
@@ -64,6 +66,14 @@ public class UsersEntity {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getDni() {

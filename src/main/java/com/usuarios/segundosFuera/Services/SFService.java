@@ -25,7 +25,7 @@ public class SFService {
     private IPeriodPaidRepo periodPaidRepo;
 
 
-    public CreateUserResponse saveUser(CreateUserRequest user)
+    public CreateUserResponse SaveUser(CreateUserRequest user)
     {
         PeriodPayEntity periodDay = periodPaidRepo.findById(user.getPeriod())
                 .orElseThrow(() -> new RuntimeException("PeriodPay not found"));
@@ -42,7 +42,7 @@ public class SFService {
         return UserMapper.CreateEntityToResponse(userSupp);
     }
 
-    public ResponseEntity delete(Long id)
+    public ResponseEntity DeleteUser(Long id)
     {
         Optional<UsersEntity> exist = userRepo.findById(id);
 

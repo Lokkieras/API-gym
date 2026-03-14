@@ -6,6 +6,7 @@ public class CreateUserRequest {
 
     private String name;
     private String surname;
+    private int age;
     private String dni;
     private Long period;
 
@@ -23,6 +24,14 @@ public class CreateUserRequest {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getDni() {
