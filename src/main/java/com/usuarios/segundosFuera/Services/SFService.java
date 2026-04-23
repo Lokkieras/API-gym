@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -55,5 +56,43 @@ public class SFService {
         userRepo.deleteById(id);
 
         return ResponseEntity.ok().body("Registro con id " + id + " eliminado correctamente");
+    }
+
+    public List<UsersEntity> getPaidUsers() {
+        return userRepo.findByPaidTrue();
+    }
+
+    public void checkAndUpdateExpiredUsers() {
+        LocalDate today = LocalDate.now();
+        List<UsersEntity> paidUsers = userRepo.findByPaidTrue();
+        
+        for(UsersEntity user : paidUsers) {
+            if(user.getExpirationDay() != null && user.getExpirationDay().isBefore(today)) {
+                user.setPaid(false);
+                userRepo.save(user);
+                System.out.println("Usuario " + user.getId() + " (" + user.getName() + ") marcado como no pagado - expiración: " + user.getExpirationDay());
+            }
+        }
+    }
+
+    public String activateUserByDni(String dni) {
+        Optional<UsersEntity> userOpt = userRepo.findByDni(dni);
+        
+        if(userOpt.isEmpty()) {
+            throw new RuntimeException("Usuario no encontrado con DNI: " + dni);
+        }
+        
+        UsersEntity user = userOpt.get();
+        
+        if(user.isPaid()) {
+            return "ya tiene mensualidad";
+        }
+        
+        user.setPaid(true);
+        LocalDate lastDayOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+        user.setExpirationDay(lastDayOfMonth);
+        userRepo.save(user);
+        
+        return "Usuario " + user.getName() + " activado correctamente con expiración hasta " + lastDayOfMonth;
     }
 }
