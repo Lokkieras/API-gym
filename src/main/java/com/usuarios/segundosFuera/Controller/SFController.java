@@ -19,29 +19,32 @@ public class SFController {
     @Autowired
     private SFService userService;
 
-
     // Guardar un nuevo usuario
     @PostMapping
     public ResponseEntity<CreateUserResponse> save(@RequestBody CreateUserRequest user) {
         return ResponseEntity.created(URI.create("")).body(userService.SaveUser(user));
     }
 
+    //Borrado de un usuario por id
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable Long id) {
         return userService.DeleteUser(id);
     }
 
+    //Obtención de usuarios con suscripción activa
     @GetMapping("/paid")
     public ResponseEntity<List<UsersEntity>> getPaidUsers() {
         return ResponseEntity.ok(userService.getPaidUsers());
     }
 
+    //Comprobacion de usuarios con suscripción expirada
     @PostMapping("/check-expiration")
     public ResponseEntity<String> checkExpiredUsers() {
         userService.checkAndUpdateExpiredUsers();
         return ResponseEntity.ok("Verificación de expiración completada");
     }
 
+    //Activación de usuario por dni
     @PostMapping("/activate-by-dni")
     public ResponseEntity<String> activateUserByDni(@RequestBody UpdateUserPaidRequest request) {
         try {
