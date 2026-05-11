@@ -2,6 +2,7 @@ package com.usuarios.segundosFuera.Services;
 
 import com.usuarios.segundosFuera.Models.PeriodPayEntity;
 import com.usuarios.segundosFuera.Models.Requests.CreateUserRequest;
+import com.usuarios.segundosFuera.Models.Requests.UpdateUserRequest;
 import com.usuarios.segundosFuera.Models.Response.CreateUserResponse;
 import com.usuarios.segundosFuera.Models.UsersEntity;
 import com.usuarios.segundosFuera.Repositorys.IPeriodPaidRepo;
@@ -94,5 +95,45 @@ public class SFService {
         userRepo.save(user);
         
         return "Usuario " + user.getName() + " activado correctamente con expiración hasta " + lastDayOfMonth;
+    }
+
+    public String updateUserByDni(String dni, UpdateUserRequest request) {
+        Optional<UsersEntity> userOpt = userRepo.findByDni(dni);
+        
+        if(userOpt.isEmpty()) {
+            throw new RuntimeException("Usuario no encontrado con DNI: " + dni);
+        }
+        
+        UsersEntity user = userOpt.get();
+        
+        // Update fields
+        if (request.getName() != null) {
+            user.setName(request.getName());
+        }
+        if (request.getSurname() != null) {
+            user.setSurname(request.getSurname());
+        }
+        if (request.getAge() != 0) { // assuming age > 0
+            user.setAge(request.getAge());
+        }
+        if (request.getDni() != null && !request.getDni().equals(user.getDni())) {
+            Optional<UsersEntity> existing = userRepo.findByDni(request.getDni());
+            if (existing.isPresent()) {
+                throw new RuntimeException("DNI ya está en uso: " + request.getDni());
+            }
+            user.setDni(request.getDni());
+        }
+        if (request.getPeriod() != null) {
+            PeriodPayEntity periodDay = periodPaidRepo.findById(request.getPeriod())
+                    .orElseThrow(() -> new RuntimeException("PeriodPay not found"));
+            user.setPeriodPaidID(periodDay);
+            // Recalculate expiration to last day of current month
+            LocalDate lastDayOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+            user.setExpirationDay(lastDayOfMonth);
+        }
+        
+        userRepo.save(user);
+        
+        return "Usuario con DNI " + dni + " actualizado correctamente";
     }
 }

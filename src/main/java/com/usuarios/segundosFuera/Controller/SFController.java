@@ -2,6 +2,7 @@ package com.usuarios.segundosFuera.Controller;
 
 import com.usuarios.segundosFuera.Models.Requests.CreateUserRequest;
 import com.usuarios.segundosFuera.Models.Requests.UpdateUserPaidRequest;
+import com.usuarios.segundosFuera.Models.Requests.UpdateUserRequest;
 import com.usuarios.segundosFuera.Models.Response.CreateUserResponse;
 import com.usuarios.segundosFuera.Models.UsersEntity;
 import com.usuarios.segundosFuera.Services.SFService;
@@ -49,6 +50,17 @@ public class SFController {
     public ResponseEntity<String> activateUserByDni(@RequestBody UpdateUserPaidRequest request) {
         try {
             String result = userService.activateUserByDni(request.getDni());
+            return ResponseEntity.ok(result);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    //Modificación de usuario por dni
+    @PutMapping("/{dni}")
+    public ResponseEntity<String> updateUserByDni(@PathVariable String dni, @RequestBody UpdateUserRequest request) {
+        try {
+            String result = userService.updateUserByDni(dni, request);
             return ResponseEntity.ok(result);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
