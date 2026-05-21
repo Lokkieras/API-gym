@@ -4,6 +4,7 @@ import com.usuarios.segundosFuera.Models.PeriodPayEntity;
 import com.usuarios.segundosFuera.Models.Requests.CreateUserRequest;
 import com.usuarios.segundosFuera.Models.Requests.UpdateUserRequest;
 import com.usuarios.segundosFuera.Models.Response.CreateUserResponse;
+import com.usuarios.segundosFuera.Models.Response.UserListEntityResponse;
 import com.usuarios.segundosFuera.Models.UsersEntity;
 import com.usuarios.segundosFuera.Repositorys.IPeriodPaidRepo;
 import com.usuarios.segundosFuera.Repositorys.IUsersRepo;
@@ -26,6 +27,32 @@ public class SFService {
     @Autowired
     private IPeriodPaidRepo periodPaidRepo;
 
+
+    public List<UserListEntityResponse> GetAllUsers()
+    {
+
+        return userRepo.findAll()
+                .stream()
+                .map(User -> {
+                    UserListEntityResponse userResponse = new UserListEntityResponse();
+                    userResponse.setName(User.getName());
+                    userResponse.setSurname(User.getSurname());
+                    userResponse.setDni(User.getDni());
+                    userResponse.setPeriod(User.getPeriodPaidID().getName());
+                    userResponse.setPayDay(User.getPayDay());
+                    userResponse.setExpirationDate(User.getExpirationDay());
+                    if ( User.isPaid() == true)
+                    {
+                        userResponse.setPaid("Todavia tiene mensualidad");
+                    }
+                    else
+                    {
+                        userResponse.setPaid("Mensualidad expirada");
+                    }
+                    return userResponse;
+                })
+                .toList();
+    }
 
     public CreateUserResponse SaveUser(CreateUserRequest user)
     {
@@ -90,8 +117,10 @@ public class SFService {
         }
         
         user.setPaid(true);
+        LocalDate actualDay = LocalDate.now();
         LocalDate lastDayOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
         user.setExpirationDay(lastDayOfMonth);
+        user.setPayDay(actualDay);
         userRepo.save(user);
         
         return "Usuario " + user.getName() + " activado correctamente con expiración hasta " + lastDayOfMonth;

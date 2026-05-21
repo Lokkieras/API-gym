@@ -4,6 +4,7 @@ import com.usuarios.segundosFuera.Models.Requests.CreateUserRequest;
 import com.usuarios.segundosFuera.Models.Requests.UpdateUserPaidRequest;
 import com.usuarios.segundosFuera.Models.Requests.UpdateUserRequest;
 import com.usuarios.segundosFuera.Models.Response.CreateUserResponse;
+import com.usuarios.segundosFuera.Models.Response.UserListEntityResponse;
 import com.usuarios.segundosFuera.Models.UsersEntity;
 import com.usuarios.segundosFuera.Services.SFService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,12 @@ public class SFController {
 
     @Autowired
     private SFService userService;
+
+    //Listar Usuarios
+    @GetMapping("/bbdd")
+    public List<UserListEntityResponse> findAll() {
+        return userService.GetAllUsers();
+    }
 
     // Guardar un nuevo usuario
     @PostMapping
@@ -63,7 +70,9 @@ public class SFController {
             String result = userService.updateUserByDni(dni, request);
             return ResponseEntity.ok(result);
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity
+                    .badRequest()
+                    .body(e.getMessage());
         }
     }
 }
