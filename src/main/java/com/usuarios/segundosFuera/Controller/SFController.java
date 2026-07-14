@@ -53,10 +53,10 @@ public class SFController {
     }
 
     //Activación de usuario por dni
-    @PostMapping("/activate-by-dni")
-    public ResponseEntity<String> activateUserByDni(@RequestBody UpdateUserPaidRequest request) {
+    @PostMapping("/activate-by-dni/{id}")
+    public ResponseEntity<String> activateUserByDni(@PathVariable Long id) {
         try {
-            String result = userService.activateUserByDni(request.getDni());
+            String result = userService.activateUserByDni(id);
             return ResponseEntity.ok(result);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();

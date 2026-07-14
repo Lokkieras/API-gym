@@ -35,20 +35,14 @@ public class SFService {
                 .stream()
                 .map(User -> {
                     UserListEntityResponse userResponse = new UserListEntityResponse();
+                    userResponse.setId(User.getId());
                     userResponse.setName(User.getName());
                     userResponse.setSurname(User.getSurname());
                     userResponse.setDni(User.getDni());
                     userResponse.setPeriod(User.getPeriodPaidID().getName());
                     userResponse.setPayDay(User.getPayDay());
                     userResponse.setExpirationDate(User.getExpirationDay());
-                    if ( User.isPaid() == true)
-                    {
-                        userResponse.setPaid("Todavia tiene mensualidad");
-                    }
-                    else
-                    {
-                        userResponse.setPaid("Mensualidad expirada");
-                    }
+                    userResponse.setPaid(User.isPaid());
                     return userResponse;
                 })
                 .toList();
@@ -56,15 +50,29 @@ public class SFService {
 
     public CreateUserResponse SaveUser(CreateUserRequest user)
     {
+        LocalDate actualDay = LocalDate.now();
+        LocalDate expirationDate;
+
+        if(user.getPeriod() == 1)
+        {
+            if(user.getAge()<18)
+            {
+                user.setPeriod(3L);
+            } else {
+                user.setPeriod(1L);
+            }
+        }
+
         PeriodPayEntity periodDay = periodPaidRepo.findById(user.getPeriod())
                 .orElseThrow(() -> new RuntimeException("PeriodPay not found"));
 
         Long days = periodDay.getDays();
-
-        //Fecha actual y fecha de caducidad obtenidas
-        //LocalDate expirationDate = actualDay.plusDays(days);
-        LocalDate actualDay = LocalDate.now();
-        LocalDate expirationDate = actualDay.with(TemporalAdjusters.lastDayOfMonth());
+        if(days==30)
+        {
+            expirationDate = actualDay.with(TemporalAdjusters.lastDayOfMonth());
+        } else {
+            expirationDate = actualDay;
+        }
 
         UsersEntity userSupp = userRepo.save(UserMapper.CreateUserRequestToUserEntity(user,actualDay,expirationDate,periodDay));
 
@@ -103,11 +111,11 @@ public class SFService {
         }
     }
 
-    public String activateUserByDni(String dni) {
-        Optional<UsersEntity> userOpt = userRepo.findByDni(dni);
+    public String activateUserByDni(Long id) {
+        Optional<UsersEntity> userOpt = userRepo.findById(id);
         
         if(userOpt.isEmpty()) {
-            throw new RuntimeException("Usuario no encontrado con DNI: " + dni);
+            throw new RuntimeException("Usuario no encontrado con ID: " + id);
         }
         
         UsersEntity user = userOpt.get();
@@ -117,13 +125,28 @@ public class SFService {
         }
         
         user.setPaid(true);
-        LocalDate actualDay = LocalDate.now();
+
+        /*LocalDate actualDay = LocalDate.now();
         LocalDate lastDayOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
         user.setExpirationDay(lastDayOfMonth);
+        user.setPayDay(actualDay);*/
+
+        PeriodPayEntity periodDay = periodPaidRepo.findById(user.getPeriodPaidID().getId())
+                .orElseThrow(() -> new RuntimeException("PeriodPay not found"));
+        LocalDate actualDay = LocalDate.now();
         user.setPayDay(actualDay);
+        LocalDate expirationDate;
+        Long days = periodDay.getDays();
+        if(days==30)
+        {
+            expirationDate = actualDay.with(TemporalAdjusters.lastDayOfMonth());
+        } else {
+            expirationDate = actualDay;
+        }
+        user.setExpirationDay(expirationDate);
         userRepo.save(user);
         
-        return "Usuario " + user.getName() + " activado correctamente con expiración hasta " + lastDayOfMonth;
+        return "Usuario " + user.getName() + " activado correctamente con expiración hasta " + expirationDate;
     }
 
     public String updateUserByDni(String dni, UpdateUserRequest request) {
@@ -156,9 +179,17 @@ public class SFService {
             PeriodPayEntity periodDay = periodPaidRepo.findById(request.getPeriod())
                     .orElseThrow(() -> new RuntimeException("PeriodPay not found"));
             user.setPeriodPaidID(periodDay);
-            // Recalculate expiration to last day of current month
-            LocalDate lastDayOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
-            user.setExpirationDay(lastDayOfMonth);
+
+            LocalDate actualDay = LocalDate.now();
+            LocalDate expirationDate;
+            Long days = periodDay.getDays();
+            if(days==30)
+            {
+                expirationDate = actualDay.with(TemporalAdjusters.lastDayOfMonth());
+            } else {
+                expirationDate = actualDay;
+            }
+            user.setExpirationDay(expirationDate);
         }
         
         userRepo.save(user);

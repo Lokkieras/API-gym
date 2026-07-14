@@ -1,4 +1,4 @@
-package com.usuarios.segundosFuera.Config;
+/*package com.usuarios.segundosFuera.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,4 +23,5 @@ public class SecurityConfig {
         return http.build();
     }
 }
+ */
 

@@ -12,7 +12,7 @@ public class UserMapper {
 
     public static UsersEntity CreateUserRequestToUserEntity(CreateUserRequest user, LocalDate actualDay, LocalDate expirationDate, PeriodPayEntity periodDay)
     {
-        UsersEntity users = new UsersEntity(user.getName(),user.getSurname(), user.getAge(), user.getDni(),periodDay,actualDay,expirationDate,true);
+        UsersEntity users = new UsersEntity(null, user.getName(),user.getSurname(), user.getAge(), user.getDni(),periodDay,actualDay,expirationDate,true);
         return users;
     }
 
