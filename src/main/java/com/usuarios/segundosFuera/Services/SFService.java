@@ -50,9 +50,6 @@ public class SFService {
 
     public CreateUserResponse SaveUser(CreateUserRequest user)
     {
-        LocalDate actualDay = LocalDate.now();
-        LocalDate expirationDate;
-
         if(user.getPeriod() == 1)
         {
             if(user.getAge()<18)
@@ -66,13 +63,8 @@ public class SFService {
         PeriodPayEntity periodDay = periodPaidRepo.findById(user.getPeriod())
                 .orElseThrow(() -> new RuntimeException("PeriodPay not found"));
 
-        Long days = periodDay.getDays();
-        if(days==30)
-        {
-            expirationDate = actualDay.with(TemporalAdjusters.lastDayOfMonth());
-        } else {
-            expirationDate = actualDay;
-        }
+        LocalDate actualDay = LocalDate.now();
+        LocalDate expirationDate = calculateExpirationDate(periodDay, actualDay);
 
         UsersEntity userSupp = userRepo.save(UserMapper.CreateUserRequestToUserEntity(user,actualDay,expirationDate,periodDay));
 
@@ -96,6 +88,13 @@ public class SFService {
 
     public List<UsersEntity> getPaidUsers() {
         return userRepo.findByPaidTrue();
+    }
+
+    private LocalDate calculateExpirationDate(PeriodPayEntity periodDay, LocalDate actualDay) {
+        if (periodDay.getDays() == 30) {
+            return actualDay.with(TemporalAdjusters.lastDayOfMonth());
+        }
+        return actualDay;
     }
 
     public void checkAndUpdateExpiredUsers() {
@@ -135,14 +134,7 @@ public class SFService {
                 .orElseThrow(() -> new RuntimeException("PeriodPay not found"));
         LocalDate actualDay = LocalDate.now();
         user.setPayDay(actualDay);
-        LocalDate expirationDate;
-        Long days = periodDay.getDays();
-        if(days==30)
-        {
-            expirationDate = actualDay.with(TemporalAdjusters.lastDayOfMonth());
-        } else {
-            expirationDate = actualDay;
-        }
+        LocalDate expirationDate = calculateExpirationDate(periodDay, actualDay);
         user.setExpirationDay(expirationDate);
         userRepo.save(user);
         
@@ -181,14 +173,7 @@ public class SFService {
             user.setPeriodPaidID(periodDay);
 
             LocalDate actualDay = LocalDate.now();
-            LocalDate expirationDate;
-            Long days = periodDay.getDays();
-            if(days==30)
-            {
-                expirationDate = actualDay.with(TemporalAdjusters.lastDayOfMonth());
-            } else {
-                expirationDate = actualDay;
-            }
+            LocalDate expirationDate = calculateExpirationDate(periodDay, actualDay);
             user.setExpirationDay(expirationDate);
         }
         
