@@ -120,7 +120,7 @@ public class SFService {
         UsersEntity user = userOpt.get();
         
         if(user.isPaid()) {
-            return "ya tiene mensualidad";
+            return "ya tiene mensualidad activa";
         }
         
         user.setPaid(true);
