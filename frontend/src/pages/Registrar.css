@@ -1,0 +1,225 @@
+.registrar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.registrar-card {
+  width: 100%;
+  max-width: 520px;
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  padding: 40px 36px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.registrar-title {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 36px;
+  color: var(--text);
+}
+
+.registrar-title-accent {
+  color: var(--accent);
+}
+
+.registrar-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.registrar-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.registrar-label {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.registrar-input,
+.registrar-select {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--text);
+  background-color: var(--bg-primary);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.25s ease;
+}
+
+.registrar-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.registrar-input:focus,
+.registrar-select:focus {
+  border-color: var(--accent);
+}
+
+.registrar-input-error {
+  border-color: #ef4444;
+}
+
+.registrar-error {
+  font-size: 12px;
+  color: #ef4444;
+  padding-left: 4px;
+}
+
+.registrar-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23A0A0A0' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+.registrar-select option {
+  background-color: var(--bg-card);
+  color: var(--text);
+}
+
+.registrar-row {
+  display: flex;
+  gap: 16px;
+}
+
+.registrar-btn {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 14px 24px;
+  border-radius: 8px;
+  border: 2px solid var(--accent);
+  background-color: var(--accent);
+  color: #111111;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+}
+
+.registrar-btn:hover:not(:disabled) {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+}
+
+.registrar-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Modal */
+.registrar-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.registrar-modal {
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  padding: 36px 32px;
+  text-align: center;
+  max-width: 380px;
+  width: 100%;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.registrar-modal-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.registrar-modal-icon.success {
+  background-color: rgba(34, 197, 94, 0.2);
+  border: 2px solid #22c55e;
+  color: #22c55e;
+}
+
+.registrar-modal-icon.error {
+  background-color: rgba(239, 68, 68, 0.2);
+  border: 2px solid #ef4444;
+  color: #ef4444;
+}
+
+.registrar-modal-text {
+  font-size: 16px;
+  color: var(--text);
+  line-height: 1.5;
+  margin-bottom: 28px;
+}
+
+.registrar-modal-btn {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 12px 36px;
+  border-radius: 8px;
+  border: 2px solid var(--accent);
+  background-color: var(--accent);
+  color: #111111;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.registrar-modal-btn:hover {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+@media (max-width: 480px) {
+  .registrar-card {
+    padding: 28px 20px;
+  }
+
+  .registrar-title {
+    font-size: 28px;
+    margin-bottom: 28px;
+  }
+
+  .registrar-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
