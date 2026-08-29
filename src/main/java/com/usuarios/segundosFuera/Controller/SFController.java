@@ -1,7 +1,6 @@
 package com.usuarios.segundosFuera.Controller;
 
 import com.usuarios.segundosFuera.Models.Requests.CreateUserRequest;
-import com.usuarios.segundosFuera.Models.Requests.UpdateUserPaidRequest;
 import com.usuarios.segundosFuera.Models.Requests.UpdateUserRequest;
 import com.usuarios.segundosFuera.Models.Response.CreateUserResponse;
 import com.usuarios.segundosFuera.Models.Response.UserListEntityResponse;
@@ -52,9 +51,9 @@ public class SFController {
         return ResponseEntity.ok("Verificación de expiración completada");
     }
 
-    //Activación de usuario por dni
+    //Activación de usuario por id
     @PostMapping("/activate-by-dni/{id}")
-    public ResponseEntity<String> activateUserByDni(@PathVariable Long id) {
+    public ResponseEntity<String> activateUserById(@PathVariable Long id) {
         try {
             String result = userService.activateUserByDni(id);
             return ResponseEntity.ok(result);
