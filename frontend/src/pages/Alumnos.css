@@ -133,6 +133,126 @@
   border-color: var(--accent-hover);
 }
 
+.alumnos-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.alumnos-btn {
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.alumnos-btn-delete {
+  background-color: transparent;
+  color: var(--text);
+  border: 2px solid var(--text-secondary);
+}
+
+.alumnos-btn-delete:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.alumnos-btn-activate {
+  background-color: var(--accent);
+  color: #111111;
+  border: 2px solid var(--accent);
+}
+
+.alumnos-btn-activate:hover:not(:disabled) {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.alumnos-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.alumnos-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.alumnos-modal {
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  padding: 36px 32px;
+  text-align: center;
+  max-width: 380px;
+  width: 100%;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.alumnos-modal-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.alumnos-modal-icon.success {
+  background-color: rgba(34, 197, 94, 0.2);
+  border: 2px solid #22c55e;
+  color: #22c55e;
+}
+
+.alumnos-modal-icon.error {
+  background-color: rgba(239, 68, 68, 0.2);
+  border: 2px solid #ef4444;
+  color: #ef4444;
+}
+
+.alumnos-modal-text {
+  font-size: 16px;
+  color: var(--text);
+  line-height: 1.5;
+  margin-bottom: 28px;
+}
+
+.alumnos-modal-btn {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 12px 36px;
+  border-radius: 8px;
+  border: 2px solid var(--accent);
+  background-color: var(--accent);
+  color: #111111;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.alumnos-modal-btn:hover {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
 @media (max-width: 480px) {
   .alumnos-card {
     padding: 28px 20px;

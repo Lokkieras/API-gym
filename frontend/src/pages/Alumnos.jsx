@@ -5,6 +5,8 @@ function Alumnos() {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [modal, setModal] = useState(null)
+  const [actionLoading, setActionLoading] = useState(false)
 
   const loadUsers = async () => {
     setLoading(true)
@@ -22,6 +24,46 @@ function Alumnos() {
       setLoading(false)
     }
   }
+
+  const handleDelete = async (id) => {
+    setActionLoading(true)
+    try {
+      const response = await fetch(`/api/gym/${id}`, { method: 'DELETE' })
+      if (response.status === 204) {
+        throw new Error('El alumno no existe en el sistema')
+      }
+      if (!response.ok) {
+        const errText = await response.text()
+        throw new Error(errText || 'Error al eliminar el alumno')
+      }
+      setModal({ type: 'success', text: 'El alumno se ha eliminado correctamente' })
+      loadUsers()
+    } catch (err) {
+      setModal({ type: 'error', text: err.message || 'Error al eliminar el alumno' })
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  const handleActivate = async (id) => {
+    setActionLoading(true)
+    try {
+      const response = await fetch(`/api/gym/activate-by-dni/${id}`, { method: 'POST' })
+      if (!response.ok) {
+        const errText = await response.text()
+        throw new Error(errText || 'Error al activar el alumno')
+      }
+      const result = await response.text()
+      setModal({ type: 'success', text: `El alumno se ha activado correctamente. ${result}` })
+      loadUsers()
+    } catch (err) {
+      setModal({ type: 'error', text: err.message || 'Error al activar el alumno' })
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  const closeModal = () => setModal(null)
 
   useEffect(() => {
     loadUsers()
@@ -56,6 +98,7 @@ function Alumnos() {
                   <th>Día de Pago</th>
                   <th>Expiración</th>
                   <th>Estado</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -73,6 +116,22 @@ function Alumnos() {
                         {user.paid ? 'Pagado' : 'No pagado'}
                       </span>
                     </td>
+                    <td className="alumnos-actions">
+                      <button
+                        className="alumnos-btn alumnos-btn-delete"
+                        onClick={() => handleDelete(user.id)}
+                        disabled={actionLoading}
+                      >
+                        Eliminar
+                      </button>
+                      <button
+                        className="alumnos-btn alumnos-btn-activate"
+                        onClick={() => handleActivate(user.id)}
+                        disabled={actionLoading}
+                      >
+                        Activar
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -80,6 +139,20 @@ function Alumnos() {
           </div>
         )}
       </div>
+
+      {modal && (
+        <div className="alumnos-modal-overlay" onClick={closeModal}>
+          <div className="alumnos-modal" onClick={e => e.stopPropagation()}>
+            <div className={`alumnos-modal-icon ${modal.type}`}>
+              {modal.type === 'success' ? '\u2713' : '\u2717'}
+            </div>
+            <p className="alumnos-modal-text">{modal.text}</p>
+            <button className="alumnos-modal-btn" onClick={closeModal}>
+              Aceptar
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   )
 }
