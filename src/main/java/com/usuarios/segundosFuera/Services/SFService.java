@@ -50,11 +50,15 @@ public class SFService {
 
     public CreateUserResponse SaveUser(CreateUserRequest user)
     {
+        if (userRepo.findByDni(user.getDni()).isPresent()) {
+            throw new RuntimeException("DNI ya está en uso: " + user.getDni());
+        }
+
         if(user.getPeriod() == 1)
         {
             if(user.getAge()<18)
             {
-                user.setPeriod(3L);
+                user.setPeriod(2L);
             } else {
                 user.setPeriod(1L);
             }

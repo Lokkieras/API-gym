@@ -21,10 +21,16 @@ function Registrar() {
   const [modal, setModal] = useState(null)
   const [loading, setLoading] = useState(false)
 
+  const lettersOnlyPattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+$/
+
   const validate = () => {
     const newErrors = {}
-    newErrors.name = form.name.trim() === '' ? 'El nombre es obligatorio' : ''
-    newErrors.surname = form.surname.trim() === '' ? 'El apellido es obligatorio' : ''
+    newErrors.name = form.name.trim() === ''
+      ? 'El nombre es obligatorio'
+      : (!lettersOnlyPattern.test(form.name.trim()) ? 'El nombre solo puede contener letras' : '')
+    newErrors.surname = form.surname.trim() === ''
+      ? 'El apellido es obligatorio'
+      : (!lettersOnlyPattern.test(form.surname.trim()) ? 'El apellido solo puede contener letras' : '')
     newErrors.age = form.age === '' ? 'La edad es obligatoria' : ''
     newErrors.dni = form.dni.trim() === '' ? 'El DNI es obligatorio' : ''
     newErrors.period = form.period === '' ? 'Selecciona un periodo' : ''
@@ -34,7 +40,11 @@ function Registrar() {
   }
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
+    let value = e.target.value
+    if (e.target.name === 'name' || e.target.name === 'surname') {
+      value = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, '')
+    }
+    setForm({ ...form, [e.target.name]: value })
     if (errors[e.target.name]) {
       setErrors({ ...errors, [e.target.name]: '' })
     }
@@ -103,7 +113,7 @@ function Registrar() {
           </div>
 
           <div className="registrar-field">
-            <label className="registrar-label" htmlFor="surname">Apellido</label>
+            <label className="registrar-label" htmlFor="surname">Apellidos</label>
             <input
               className={`registrar-input ${errors.surname ? 'registrar-input-error' : ''}`}
               type="text"
@@ -111,7 +121,7 @@ function Registrar() {
               name="surname"
               value={form.surname}
               onChange={handleChange}
-              placeholder="Ej: Perez"
+              placeholder="Ej: Perez Gomez"
             />
             {errors.surname && <span className="registrar-error">{errors.surname}</span>}
           </div>
@@ -159,6 +169,7 @@ function Registrar() {
             >
               <option value="" disabled>Seleccionar periodo</option>
               <option value="1">Mensual</option>
+              <option value="3">Diaria</option>
             </select>
             {errors.period && <span className="registrar-error">{errors.period}</span>}
           </div>

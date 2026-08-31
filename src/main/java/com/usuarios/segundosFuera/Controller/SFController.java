@@ -6,6 +6,7 @@ import com.usuarios.segundosFuera.Models.Response.CreateUserResponse;
 import com.usuarios.segundosFuera.Models.Response.UserListEntityResponse;
 import com.usuarios.segundosFuera.Models.UsersEntity;
 import com.usuarios.segundosFuera.Services.SFService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class SFController {
 
     // Guardar un nuevo usuario
     @PostMapping
-    public ResponseEntity<CreateUserResponse> save(@RequestBody CreateUserRequest user) {
+    public ResponseEntity<CreateUserResponse> save(@Valid @RequestBody CreateUserRequest user) {
         return ResponseEntity.created(URI.create("")).body(userService.SaveUser(user));
     }
 
@@ -64,7 +65,7 @@ public class SFController {
 
     //Modificación de usuario por dni
     @PutMapping("/{dni}")
-    public ResponseEntity<String> updateUserByDni(@PathVariable String dni, @RequestBody UpdateUserRequest request) {
+    public ResponseEntity<String> updateUserByDni(@PathVariable String dni, @Valid @RequestBody UpdateUserRequest request) {
         try {
             String result = userService.updateUserByDni(dni, request);
             return ResponseEntity.ok(result);
