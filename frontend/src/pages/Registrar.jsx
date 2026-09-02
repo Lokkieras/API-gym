@@ -21,16 +21,16 @@ function Registrar() {
   const [modal, setModal] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const lettersOnlyPattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+$/
+  const lettersOnlyPattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/
 
   const validate = () => {
     const newErrors = {}
     newErrors.name = form.name.trim() === ''
       ? 'El nombre es obligatorio'
-      : (!lettersOnlyPattern.test(form.name.trim()) ? 'El nombre solo puede contener letras' : '')
+      : (!lettersOnlyPattern.test(form.name.trim()) ? 'El nombre solo puede contener letras y espacios' : '')
     newErrors.surname = form.surname.trim() === ''
       ? 'El apellido es obligatorio'
-      : (!lettersOnlyPattern.test(form.surname.trim()) ? 'El apellido solo puede contener letras' : '')
+      : (!lettersOnlyPattern.test(form.surname.trim()) ? 'El apellido solo puede contener letras y espacios' : '')
     newErrors.age = form.age === '' ? 'La edad es obligatoria' : ''
     newErrors.dni = form.dni.trim() === '' ? 'El DNI es obligatorio' : ''
     newErrors.period = form.period === '' ? 'Selecciona un periodo' : ''
